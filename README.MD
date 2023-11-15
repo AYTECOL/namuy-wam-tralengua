@@ -21,6 +21,10 @@ La herramienta permite
 9. Ejecutamos servidores de desarrollo `gradio cc dev`
 10. Se abre el sitio __http://127.0.0.1:7860/__. Los cambios a demo/app.py se reflejan inmediatamente. Los cambios (hotreload) en frontend (para componentes personalizados) no están funcionado bien (bug OP?), debe reejecutarse todo. Para desarrollo normal, el servidor de back y app.py deben funcionar bien.
 
+# Publish
+11. In keyboardtexboxcomponent folder: `gradio cc publish`
+12. (not working) `gradio deploy` to namuy-wam-tralengua 
+
 # Realizado
 Se realiza el tutorial: https://www.gradio.app/guides/five-minute-guide para crear el componente KeyboardTextBoxComponent
 

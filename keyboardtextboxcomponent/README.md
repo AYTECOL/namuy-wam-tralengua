@@ -1,3 +1,9 @@
+---
+title: namuy-wam-tralengua
+app_file: demo/app.py
+sdk: gradio
+sdk_version: 4.3.0
+---
 
 # gradio_keyboardtextboxcomponent
 A Custom Gradio component.
