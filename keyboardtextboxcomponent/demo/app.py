@@ -4,20 +4,11 @@ from gradio_keyboardtextboxcomponent import KeyboardTextBoxComponent
 import json
 import requests
 
-API_URL_LIST = "https://jsonplaceholder.typicode.com/todos"
+API_URL_LIST = "https://2xp1wr4k54.execute-api.us-east-1.amazonaws.com/dev/v1/translations/index"
+API_URL_UPDATE = "https://2xp1wr4k54.execute-api.us-east-1.amazonaws.com/dev/v1/translations/update"
 
 # Una aplicación con un listado de traducciones pendientes
 # presionar sobre una 
-def translation_chat_fn(translation_index, modification):
-    # transform index to id
-    # submit to api
-    
-    response = requests.get(API_URL_LIST) # TODO: Post
-    response.json()
-    print(response.json())
-
-    api_response = True
-    return "Traducción corregida" if api_response else "Error del servicio"
 
 selected_translation_index = 0
 
@@ -25,12 +16,43 @@ selected_translation_index = 0
 #                 {"id": 0, "text_spa": "The quick brown fox jumps over the lazy dog", "text_gum": "El rápido zorro café salta sobre los perezosos perros"},
 #                 {"id": 1, "text_spa": "Build & share delightful machine learning apps", "text_gum": "Construye y comparte encantadoras aplicaciones de aprendizaje de máquina"},
 # ]
-translations_response = requests.get(API_URL_LIST).json() # TODO: Post
-translations = list(map(lambda x: [x["title"]], translations_response))
+request = {
+    "data": {
+        "per_page": 10
+    }
+}
+translations_response = requests.post(API_URL_LIST, json=request)
+#json.loads(str(response["Item"]).replace("'", '"').encode('utf-8'))
+translations_response=json.loads(json.dumps(translations_response.json()).replace("'", '"').encode('utf-8'))["records"]
+translations = list(map(lambda x: [f'{x["gum"]} : {x["es"]}', x["gum"], x["es"], x["translation_timestamp"]], translations_response))
+
+# print(translations)
+
+def translation_chat_fn(translation_index, mod_gum, mod_spa):
+    # transform index to id
+    # submit to api
+    translation = translations[translation_index]
+    request = {
+        "data": {
+            "key": {
+                "translation_timestamp": translation[3],
+                "is_checked": "False"
+            }, 
+            "new_values": {
+                "is_checked": "True",
+                "gum": mod_gum,
+                "es": translation[2], #TODO: next version
+            }
+        }
+    }
+    response = requests.post(API_URL_UPDATE, json=request)
+    response.json()
+
+    return "Traducción corregida" if response.status_code == 200 else "Error del servicio"
 
 # Interface Components
 with gr.Blocks() as demo:
-    translations_dataset_input = gr.Dataset(components=[gr.Textbox(visible=False)],# gr.Textbox(visible=False)],
+    translations_dataset_input = gr.Dataset(components=[gr.Textbox(visible=False)],#, gr.Textbox(visible=False)],
 
                 label="Traducciones",
                 samples=translations,
@@ -38,22 +60,22 @@ with gr.Blocks() as demo:
                 samples_per_page=10
             )
     gum_keyboard_textbox_input = KeyboardTextBoxComponent(#value=translations[selected_translation_index][0], 
-                label="Traducciones", 
+                label="Al Namuy Wam (Namtrik)", 
                 #info="Elige las traducciones que desees revisar"
             )
-
+    spa_textbox_input = gr.Textbox(label="Del Español", interactive=False)
     # Interactions
     def assign_trasnlation_id(evt: gr.SelectData):
         # selected_translation_index = evt.index
-        # print(evt)
-        return translations[evt.index][0]
-    translations_dataset_input.select(fn=assign_trasnlation_id, outputs=[gum_keyboard_textbox_input])
+        return translations[evt.index][1], translations[evt.index][2]
+    translations_dataset_input.select(fn=assign_trasnlation_id, outputs=[gum_keyboard_textbox_input,spa_textbox_input])
 
 # Interface
     gr.Interface(
         translation_chat_fn,
         [
             translations_dataset_input,
+            spa_textbox_input,
             gum_keyboard_textbox_input, 
         ],
         "text",  
