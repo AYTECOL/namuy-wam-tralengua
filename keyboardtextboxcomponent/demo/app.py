@@ -3,9 +3,14 @@ import gradio as gr
 from gradio_keyboardtextboxcomponent import KeyboardTextBoxComponent
 import json
 import requests
+import os
+from dotenv import load_dotenv
 
-API_URL_LIST = "https://2xp1wr4k54.execute-api.us-east-1.amazonaws.com/dev/v1/translations/index"
-API_URL_UPDATE = "https://2xp1wr4k54.execute-api.us-east-1.amazonaws.com/dev/v1/translations/update"
+load_dotenv()
+
+API_URL_LIST = os.getenv('API_URL_LIST')
+API_URL_UPDATE = os.getenv('API_URL_UPDATE')
+API_TOKEN = os.getenv('API_TOKEN')
 
 # Una aplicación con un listado de traducciones pendientes
 # presionar sobre una 
@@ -21,7 +26,7 @@ request = {
         "per_page": 10
     }
 }
-translations_response = requests.post(API_URL_LIST, json=request)
+translations_response = requests.post(API_URL_LIST, json=request, headers={"x-api-key":API_TOKEN})
 #json.loads(str(response["Item"]).replace("'", '"').encode('utf-8'))
 translations_response=json.loads(json.dumps(translations_response.json()).replace("'", '"').encode('utf-8'))["records"]
 translations = list(map(lambda x: [f'{x["gum"]} : {x["es"]}', x["gum"], x["es"], x["translation_timestamp"]], translations_response))
@@ -45,7 +50,7 @@ def translation_chat_fn(translation_index, mod_gum, mod_spa):
             }
         }
     }
-    response = requests.post(API_URL_UPDATE, json=request)
+    response = requests.post(API_URL_UPDATE, json=request, headers={"x-api-key":API_TOKEN})
     response.json()
 
     return "Traducción corregida" if response.status_code == 200 else "Error del servicio"

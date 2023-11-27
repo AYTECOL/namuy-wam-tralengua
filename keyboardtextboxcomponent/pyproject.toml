@@ -43,7 +43,7 @@ classifiers = [
 dev = ["build", "twine"]
 
 [tool.hatch.build]
-artifacts = ["/backend/gradio_keyboardtextboxcomponent/templates", "*.pyi", "backend/gradio_keyboardtextboxcomponent/templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates"]
+artifacts = ["/backend/gradio_keyboardtextboxcomponent/templates", "*.pyi", "backend/gradio_keyboardtextboxcomponent/templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates", "\\backend\\gradio_keyboardtextboxcomponent\\templates"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["/backend/gradio_keyboardtextboxcomponent"]
