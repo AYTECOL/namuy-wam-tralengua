@@ -4,13 +4,14 @@ from gradio_keyboardtextboxcomponent import KeyboardTextBoxComponent
 import json
 import requests
 import os
-from dotenv import load_dotenv
+from environs import Env
 
-load_dotenv()
+env = Env()
+env.read_env()
 
-API_URL_LIST = os.getenv('API_URL_LIST')
-API_URL_UPDATE = os.getenv('API_URL_UPDATE')
-API_TOKEN = os.getenv('API_TOKEN')
+API_URL_LIST = env.str('API_URL_LIST')
+API_URL_UPDATE = env.str('API_URL_UPDATE')
+API_TOKEN = env.str('API_TOKEN')
 
 # Una aplicación con un listado de traducciones pendientes
 # presionar sobre una 
